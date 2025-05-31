@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pip-Boy 3000 - Enhanced Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="pipboy-container">
+        <div id="pipboy-header">PIP-BOY 3000 Mk VII</div>
+        <div id="pipboy-tabs">
+            <button class="tab-button active" data-tab="game">GAME</button>
+            <button class="tab-button" data-tab="status">STAT</button>
+            <button class="tab-button" data-tab="inv">INV</button>
+            <button class="tab-button" data-tab="data">DATA</button>
+            <button class="tab-button" data-tab="plot">PLOT</button>
+            <button class="tab-button" data-tab="companion">COMP</button>
+            <button class="tab-button" data-tab="perks">PERKS</button>
+            <button class="tab-button" data-tab="map">MAP</button>
+            <button class="tab-button" data-tab="radio">RADIO</button>
+            <button class="tab-button" data-tab="arena">ARENA</button>
+            <button class="tab-button" data-tab="base" id="base-tab-button" style="display: none;">BASE</button>
+        </div>
+        <div id="pipboy-screen">
+            <div id="status-bar">
+                <span>HP: <span id="player-hp-status">100</span>/<span id="player-max-hp-status">100</span></span>
+                <span>AP: <span id="player-ap-status">70</span>/<span id="player-max-ap-status">70</span></span>
+                <span>LVL: <span id="player-level-status">1</span></span>
+            </div>
+             <div id="time-weather-bar">
+                <span>Время: <span id="current-time">08:00</span></span>
+                <span>Погода: <span id="current-weather">Ясно</span></span>
+            </div>
+
+            <!-- Game Content (теперь основной для вкладки GAME) -->
+            <div id="game-main-content" class="screen-content active">
+                <div id="game-output"></div>
+                <div id="choices-container"></div>
+            </div>
+
+            <!-- STATUS Tab -->
+            <div id="status-content" class="screen-content">
+                <h2>ОСНОВНОЙ СТАТУС</h2>
+                <div class="status-section">
+                    <h3>ОБЩЕЕ СОСТОЯНИЕ</h3>
+                    <div class="stat-item"><span>Состояние</span> <span id="player-condition" class="stat-value">Норма</span></div>
+                    <div class="stat-item"><span>Радиация</span> <span id="player-rads-level" class="stat-value">Нет</span> (<span id="player-rads" class="stat-value">0</span> RAD)</div>
+                    <div class="stat-item"><span>Скрытность</span> <span id="player-stealth-status" class="stat-value">Обнаружен</span></div>
+                    <div class="stat-item"><span>Болезни</span> <span id="player-diseases" class="stat-value">Нет</span></div>
+                    <div class="stat-item"><span>Зависимости</span> <span id="player-addictions" class="stat-value">Нет</span></div>
+                </div>
+                <div class="status-section">
+                    <h3>S.P.E.C.I.A.L.</h3>
+                    <div class="stat-item"><span>Сила (STR)</span> <span id="stat-s" class="stat-value">5</span></div>
+                    <div class="stat-item"><span>Восприятие (PER)</span> <span id="stat-p" class="stat-value">5</span></div>
+                    <div class="stat-item"><span>Выносливость (END)</span> <span id="stat-e" class="stat-value">5</span></div>
+                    <div class="stat-item"><span>Харизма (CHA)</span> <span id="stat-c" class="stat-value">5</span></div>
+                    <div class="stat-item"><span>Интеллект (INT)</span> <span id="stat-i" class="stat-value">5</span></div>
+                    <div class="stat-item"><span>Ловкость (AGI)</span> <span id="stat-a" class="stat-value">5</span></div>
+                    <div class="stat-item"><span>Удача (LCK)</span> <span id="stat-l" class="stat-value">5</span></div>
+                </div>
+                <div class="status-section">
+                    <h3>СОСТОЯНИЕ КОНЕЧНОСТЕЙ</h3>
+                    <div class="limb-status-item"><span><span class="limb-icon">[✓]</span> Голова</span> <span id="limb-head" class="limb-condition limb-ok">Норма</span></div>
+                    <div class="limb-status-item"><span><span class="limb-icon">[✓]</span> Торс</span> <span id="limb-torso" class="limb-condition limb-ok">Норма</span></div>
+                    <div class="limb-status-item"><span><span class="limb-icon">[✓]</span> Левая Рука</span> <span id="limb-left_arm" class="limb-condition limb-ok">Норма</span></div>
+                    <div class="limb-status-item"><span><span class="limb-icon">[✓]</span> Правая Рука</span> <span id="limb-right_arm" class="limb-condition limb-ok">Норма</span></div>
+                    <div class="limb-status-item"><span><span class="limb-icon">[✓]</span> Левая Нога</span> <span id="limb-left_leg" class="limb-condition limb-ok">Норма</span></div>
+                    <div class="limb-status-item"><span><span class="limb-icon">[✓]</span> Правая Нога</span> <span id="limb-right_leg" class="limb-condition limb-ok">Норма</span></div>
+                </div>
+                <div class="status-section">
+                    <h3>ПРОЧЕЕ</h3>
+                    <div class="stat-item"><span>Опыт (XP)</span> <span id="player-xp" class="stat-value">0</span> / <span id="player-xp-next" class="stat-value">100</span></div>
+                    <div class="stat-item"><span>Крышки (Caps)</span> <span id="player-caps" class="stat-value">25</span></div>
+                </div>
+            </div>
+
+            <!-- INV Tab -->
+            <div id="inv-content" class="screen-content">
+                <h2>ИНВЕНТАРЬ</h2>
+                <h3>Оружие</h3> <ul id="inventory-weapons-list"></ul>
+                <h3>Одежда</h3> <ul id="inventory-apparel-list"><li>Костюм Убежища 76 (Вес: 2)</li></ul>
+                <h3>Помощь</h3> <ul id="inventory-aid-list"></ul>
+                <h3>Разное</h3> <ul id="inventory-misc-list"></ul>
+                <div id="inventory-weight">Вес: <span id="current-weight">0</span> / <span id="max-weight">150</span></div>
+            </div>
+
+            <!-- DATA Tab -->
+            <div id="data-content" class="screen-content">
+                <h2>ДАННЫЕ</h2>
+                <div class="data-section">
+                    <h3>ЗАДАНИЯ</h3> <ul id="quest-list"></ul>
+                </div>
+                <div class="data-section">
+                    <h3>ЗАМЕТКИ / ГОЛОДИСКИ</h3> <ul id="holodisk-list"></ul>
+                </div>
+                 <div class="data-section">
+                    <h3>РЕПУТАЦИЯ</h3> <ul id="reputation-list"></ul>
+                </div>
+            </div>
+
+            <!-- PLOT Tab -->
+            <div id="plot-content" class="screen-content">
+                <h2>СЮЖЕТНЫЙ ЖУРНАЛ</h2>
+                <div id="plot-journal"></div>
+            </div>
+
+            <!-- COMPANION Tab -->
+            <div id="companion-content" class="screen-content">
+                <h2>КОМПАНЬОН</h2>
+                <div id="companion-status-area">
+                    <p>У вас нет компаньона.</p>
+                </div>
+                <div id="companion-inventory-area" style="display:none;">
+                    <h3>Инвентарь компаньона (<span id="companion-name-inv"></span>):</h3>
+                    <ul id="companion-inventory-list"></ul>
+                </div>
+                <div id="companion-commands-area" style="display:none;">
+                    <h3>Команды:</h3>
+                    <button class="main-button" id="companion-command-wait">Ждать / Следовать</button>
+                    <button class="main-button" id="companion-command-search">Искать предметы</button>
+                    <button class="main-button" id="companion-command-trade">Обмен вещами</button>
+                    <button class="main-button" id="companion-command-dismiss">Отпустить</button>
+                </div>
+            </div>
+
+            <!-- PERKS Tab -->
+            <div id="perks-content" class="screen-content">
+                <h2>ПЕРКИ</h2>
+                <p>Доступно очков перков: <span id="perk-points">0</span></p>
+                <ul id="perks-list"></ul>
+            </div>
+
+            <!-- MAP Tab -->
+            <div id="map-content" class="screen-content">
+                <h2>КАРТА МИРА</h2>
+                <p id="map-status">Локальные данные карты недоступны.</p>
+                <h3>ИЗВЕСТНЫЕ ЛОКАЦИИ:</h3> <ul id="discovered-locations-list"></ul>
+                <hr>
+                <h2>КАРТА ЛОКАЦИИ (<span id="current-location-map-name">Неизвестно</span>)</h2>
+                <div id="local-map-display">
+                    <p>Карта текущей локации недоступна.</p>
+                </div>
+            </div>
+
+            <!-- RADIO Tab -->
+            <div id="radio-content" class="screen-content">
+                <h2>РАДИО</h2>
+                <div id="radio-stations">
+                    <button class="main-button radio-station-button" data-station="off">ВЫКЛЮЧИТЬ РАДИО</button>
+                    <button class="main-button radio-station-button" data-station="news">Новости Пустоши</button>
+                    <button class="main-button radio-station-button" data-station="vault_classics">Классика Убежища</button>
+                    <button class="main-button radio-station-button" data-station="bos_signal">Сигнал Братства</button>
+                </div>
+                <div id="radio-output">
+                    <p>Радио выключено.</p>
+                </div>
+            </div>
+
+            <!-- ARENA Tab -->
+            <div id="arena-content" class="screen-content">
+                <div id="arena-selection-screen">
+                    <h2>АРЕНА - ВЫБОР ПРОТИВНИКА</h2>
+                    <div class="arena-selection">
+                        <button class="main-button" data-enemy="raider_scum">Рейдер-Отморозок (Легко)</button>
+                        <button class="main-button" data-enemy="feral_ghoul">Дикий Гуль (Средне)</button>
+                        <button class="main-button" data-enemy="super_mutant_brute">Супермутант-Громила (Сложно)</button>
+                    </div>
+                </div>
+                <div id="combat-screen-content" style="display: none;">
+                    <h2>БОЙ НА АРЕНЕ</h2>
+                    <div class="combat-zone">
+                        <div class="combatant-info" id="player-combat-info">
+                            <h3>Игрок</h3>
+                            <div>HP: <span id="player-combat-hp">100</span>/<span id="player-combat-max-hp">100</span></div>
+                            <div class="hp-bar-container"><div id="player-combat-hp-bar" class="hp-bar"></div></div>
+                            <div>AP: <span id="player-combat-ap">70</span>/<span id="player-combat-max-ap">70</span></div>
+                        </div>
+                        <div class="combatant-info" id="enemy-combat-info">
+                            <h3><span id="enemy-name">Враг</span></h3>
+                            <div>HP: <span id="enemy-combat-hp">50</span>/<span id="enemy-combat-max-hp">50</span></div>
+                            <div class="hp-bar-container"><div id="enemy-combat-hp-bar" class="hp-bar"></div></div>
+                        </div>
+                    </div>
+                    <div id="target-selection-container">
+                        <h3>ВЫБЕРИТЕ ЦЕЛЬ (<span id="attack-ap-cost">3</span> AP):</h3>
+                        <div id="enemy-parts" class="target-selection"></div>
+                    </div>
+                    <div class="combat-actions">
+                        <h3>ДЕЙСТВИЯ:</h3>
+                        <button id="action-use-stimpak">Стимулятор (<span id="stimpak-count">0</span>) (2 AP)</button>
+                        <button id="action-pass-turn">Пропустить Ход (Восст. AP)</button>
+                        <button id="action-leave-arena" style="display:none;">Покинуть Арену</button>
+                    </div>
+                    <hr>
+                    <h3>ЛОГ БОЯ:</h3>
+                    <div id="combat-log"></div>
+                </div>
+            </div>
+
+            <!-- Terminal Hacking Screen -->
+            <div id="terminal-hacking-screen" class="screen-content">
+                <h2>ВЗЛОМ ТЕРМИНАЛА <span id="terminal-difficulty"></span></h2>
+                <div id="terminal-output"></div>
+                <div id="terminal-log"></div>
+                <div id="terminal-input-area">
+                    Попыток осталось: <span id="terminal-attempts-left">4</span><br>
+                    <input type="text" id="terminal-user-input" placeholder="Введите слово...">
+                    <button id="terminal-submit-button">Ввод</button>
+                    <button id="terminal-exit-button">Выход</button>
+                </div>
+                 <div id="terminal-success-message" style="display:none;">
+                    <h3>ДОСТУП ПОЛУЧЕН</h3>
+                    <p id="terminal-success-text"></p>
+                    <button id="terminal-close-success-button">Закрыть терминал</button>
+                </div>
+                <div id="terminal-failure-message" style="display:none;">
+                    <h3>ДОСТУП ЗАБЛОКИРОВАН</h3>
+                    <button id="terminal-close-failure-button">Закрыть терминал</button>
+                </div>
+            </div>
+
+            <!-- Minesweeper (Trap Disarm) Screen -->
+            <div id="minesweeper-screen" class="screen-content">
+                <h2>ОБЕЗВРЕЖИВАНИЕ ЛОВУШКИ</h2>
+                <p>Осторожно! Похоже, здесь установлена ловушка. Попробуйте её обезвредить.</p>
+                <p>Сложность: <span id="minesweeper-difficulty">Легко</span>. Мин: <span id="minesweeper-mine-count">?</span></p>
+                <div id="minesweeper-grid"></div>
+                <div id="minesweeper-message"></div>
+                <button id="minesweeper-exit-button" class="main-button">Отказаться (Риск срабатывания!)</button>
+            </div>
+
+            <!-- BASE Tab Content -->
+            <div id="base-content" class="screen-content">
+                <h2>УПРАВЛЕНИЕ БАЗОЙ (<span id="base-name-display">Загрузка...</span>)</h2>
+                <div id="base-overview-section"><p>Загрузка обзора базы...</p></div>
+                <div id="base-resources-section"><p>Загрузка ресурсов...</p></div>
+                <div id="base-buildings-section"><p>Загрузка построек...</p></div>
+                <div id="base-construction-section"><p>Загрузка чертежей...</p></div>
+                <div id="base-settlers-section"><p>Загрузка поселенцев...</p></div>
+                <div id="base-defense-section"><p>Загрузка информации об обороне...</p></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="story.js"></script>
+    <script src="gamedata.js"></script>
+    <script src="base.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
